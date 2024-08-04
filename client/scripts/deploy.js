@@ -2,9 +2,7 @@
 //
 const hre = require("hardhat");
 //
-//
 // const ETHER_ADDRESS = "0x0000000000000000000000000000000000000000";
-//
 //
 function to_ETH(x) {
     return ethers.parseUnits(x.toString(), "ether");
@@ -98,54 +96,60 @@ async function Mint() {
     const ercName = "MyToken";
     const ercSymbol = "MTK";
     //
-    const nftName = "FactionNFT";
-    const nftSymbol = "FNFT";
-    const baseURI = "i101.app";
+    const nftName_faction = "FactionNFT";
+    const nftSymbol_faction = "FNFT";
+    const baseTokenURI_i101 = "faction.app";
     //
     // -------------------------------------
     const gameNftCost = 1;
-    const gameNftName = "GameNFT";
-    const gameNftSymbol = "GNFT";
-    const baseGameTokenURI = "oligarch.app";
+    const nftName_game = "GameNFT";
+    const nftSymbol_game = "GNFT";
+    const baseTokenURI_oligarch = "game.app";
     // -------------------------------------
     //
-    const nftFactory = await ethers.getContractFactory(nftName);
-    const nftContract = await nftFactory.deploy(
-        nftName,
-        nftSymbol,
+    const nftFactory_factopm = await ethers.getContractFactory(nftName_faction);
+    const nftContract_faction = await nftFactory_factopm.deploy(
+        nftName_faction,
+        nftSymbol_faction,
         ercName,
         ercSymbol,
-        baseURI
+        baseTokenURI_i101
     );
-    await nftContract.waitForDeployment();
+    await nftContract_faction.waitForDeployment();
     //
     const exchangeFactory = await ethers.getContractFactory(exchangeName);
     const exchangeContract = await exchangeFactory.deploy(deployer, 10);
     await exchangeContract.waitForDeployment();
     //
     //
-    const tokenAddress = await nftContract.getMyTokenAddress();
+    const tokenAddress = await nftContract_faction.getMyTokenAddress();
     const listTokenTxn = await exchangeContract.listToken(tokenAddress, ercSymbol);
     const tokenReceipt = await listTokenTxn.wait();
     //
     //
     if (tokenReceipt.status === 1) {
         console.log("Token listed on exchange");
+    } else {
+        console.log("FAILED TOKEN RECEIPT --- ", tokenReceipt);
     }
     //
     //
-    gameNftFactory = await ethers.getContractFactory(gameNftName);
-    gameNftContract = await gameNftFactory.deploy(
-        gameNftName,
-        gameNftSymbol,
-        baseGameTokenURI,
+    const nftFactory_game = await ethers.getContractFactory(nftName_game);
+    const nftContract_game = await nftFactory_game.deploy(
+        nftName_game,
+        nftSymbol_game,
+        baseTokenURI_oligarch,
         tokenAddress
     );
-    await gameNftContract.waitForDeployment();
+    await nftContract_game.waitForDeployment();
     //
     //
-    console.log(`\n*** >>> Deployed [Game] contract at: ${gameNftContract.target}`);
-    console.log(`*** >>> Deployed [ERC] contract at: ${tokenAddress}`);
-    console.log(`*** >>> Deployed [NFT] contract at: ${nftContract.target}`);
-    console.log(`*** >>> Deployed [exchange] contract at: ${exchangeContract.target}\n`);
+    console.log(`\n*** >>> Deployed [MyToken] contract at: ${tokenAddress}`);
+    console.log(`*** >>> Deployed [GameNFT] contract at: ${nftContract_game.target}`);
+    console.log(
+        `*** >>> Deployed [FactionNFT] contract at: ${nftContract_faction.target}`
+    );
+    console.log(
+        `*** >>> Deployed [MyExchange] contract at: ${exchangeContract.target}\n`
+    );
 }

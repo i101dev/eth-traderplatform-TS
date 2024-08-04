@@ -8,13 +8,14 @@ import { to_NUM, to_ETH, UseRoot, RootCntxType } from "../../providers/RootCntx"
 import { fNum, headerCls } from "../../../../__PKG__/util/H";
 import { H, T } from "../../../../__PKG__/X";
 //
-import MYEXCHANGE_ABI from "../../abis/MyExchange.json";
-import MYTOKEN_ABI from "../../abis/MyToken.json";
+// import MYEXCHANGE_ABI from "../../abis/MyExchange.json";
+// import MYTOKEN_ABI from "../../abis/MyToken.json";
 import { EthCntxType, UseEth } from "../../providers/EthCntx";
 //
 //
 const ETHER_ADDRESS = "0x0000000000000000000000000000000000000000";
-const EXCHANGE_ADDR = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+
+import contracts from "../../contracts.json";
 //
 //
 const setOrderPrice = (order: T.OrderDat) => {
@@ -228,8 +229,8 @@ export default function Orderbook() {
         //
         //
         const _exchangeContract = new ethers.Contract(
-            EXCHANGE_ADDR,
-            MYEXCHANGE_ABI,
+            contracts["MyExchange"].address,
+            contracts["MyExchange"].abi,
             _provider
         );
         //
@@ -250,7 +251,11 @@ export default function Orderbook() {
             //
             const tokenDat = parse_TokenDat(c);
             //
-            const contract = new ethers.Contract(tokenDat.addr, MYTOKEN_ABI, _provider);
+            const contract = new ethers.Contract(
+                tokenDat.addr,
+                contracts["MyToken"].abi,
+                _provider
+            );
             //
             _allTokenContracts.push({ tokenDat, contract });
         }

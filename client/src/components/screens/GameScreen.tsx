@@ -4,8 +4,6 @@ import React from "react";
 import MyInput from "../../hooks/MyInput";
 import MySelect from "../../hooks/MySelect";
 //
-import MyToken_ABI from "../../abis/MyToken.json";
-import GameNFT_ABI from "../../abis/GameNFT.json";
 //
 import { ethers } from "ethers";
 import { H, T, qBtn } from "../../../../__PKG__/X";
@@ -14,8 +12,7 @@ import { RootCntxType, UseRoot, to_ETH, to_NUM } from "../../providers/RootCntx"
 import { EthCntxType, UseEth } from "../../providers/EthCntx";
 //
 //
-const GameNFT_ADDR = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
-//
+import contracts from "../../contracts.json";
 //
 const labelCls = "C-M4 FS-1-8 MB-05";
 const valueCls = "BG-D8 SH-I FS-2 c-bs SP TXT-E";
@@ -191,10 +188,19 @@ export default function GameScreen() {
     const load_contracts = async (_provider: ethers.BrowserProvider) => {
         //
         //
-        const _gameContract = new ethers.Contract(GameNFT_ADDR, GameNFT_ABI, _provider);
+        const _gameContract = new ethers.Contract(
+            contracts["GameNFT"].address,
+            contracts["GameNFT"].abi,
+            _provider
+        );
+        //
         const tokenAddress = await _gameContract.getTokenAddress();
         //
-        const _ercContract = new ethers.Contract(tokenAddress, MyToken_ABI, _provider);
+        const _ercContract = new ethers.Contract(
+            tokenAddress,
+            contracts["MyToken"].abi,
+            _provider
+        );
         //
         const _nftName = await _gameContract.name();
         const _nftSymbol = await _gameContract.symbol();
@@ -351,7 +357,7 @@ export default function GameScreen() {
             set_userAlerts([
                 {
                     header: "NFT mint failed",
-                    details: [error.reason],
+                    details: [error.message],
                 },
             ]);
         }

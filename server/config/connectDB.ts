@@ -41,7 +41,7 @@ export async function connectDB() {
         //
         await mongoose.connect(MONGO_URL, {});
         //
-        console.log(`*** >>> Mongo: ${MONGO_IP}:${MONGO_PORT}/${MONGO_DB}\n`);
+        console.log(`*** >>> Mongo: ${MONGO_URL}\n`);
         //
     } catch (error) {
         //

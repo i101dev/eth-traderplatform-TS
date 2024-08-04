@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "./MyToken.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "./SafeMath.sol";
 
 
 contract MyExchange {

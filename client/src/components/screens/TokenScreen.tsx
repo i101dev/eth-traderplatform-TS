@@ -4,17 +4,15 @@ import React from "react";
 //
 import { FaAngleDoubleRight, FaEthereum, FaFire } from "react-icons/fa";
 import { RootCntxType, UseRoot, to_ETH, to_NUM } from "../../providers/RootCntx";
+import { EthCntxType, UseEth } from "../../providers/EthCntx";
 import { T, H, qBtn } from "../../../../__PKG__/X";
 import { BiTransfer } from "react-icons/bi";
 import { ethers } from "ethers";
 //
-import FactionNFT_ABI from "../../abis/FactionNFT.json";
-import MyToken_ABI from "../../abis/MyToken.json";
-import MySwap_ABI from "../../abis/MySwap.json";
 import EthPrice from "../EthPrice";
-import { EthCntxType, UseEth } from "../../providers/EthCntx";
 //
-const NFT_ADDR = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+//
+import contracts from "../../contracts.json";
 //
 //
 const labelCls = "C-M4 FS-1-8 MB-05";
@@ -85,7 +83,7 @@ export default function MintScreen() {
     const [ercSymbol, set_ercSymbol] = React.useState<string>("");
     const [ercSupply, set_ercSupply] = React.useState<number>(0);
     //
-    const [swapName, set_swapName] = React.useState<string>("");
+    const [_, set_swapName] = React.useState<string>("");
     const [swapRate, set_swapRate] = React.useState<number>(0);
     //
     const [cEthBal, set_cEthBal] = React.useState<number>(0);
@@ -161,13 +159,23 @@ export default function MintScreen() {
     const load_contracts = async (_provider: ethers.BrowserProvider) => {
         //
         //
-        const _nftContract = new ethers.Contract(NFT_ADDR, FactionNFT_ABI, _provider);
+        const _nftContract = new ethers.Contract(
+            contracts["FactionNFT"].address,
+            contracts["FactionNFT"].abi,
+            _provider
+        );
+        //
         const tokenAddress = await _nftContract.getMyTokenAddress();
         //
-        const _ercContract = new ethers.Contract(tokenAddress, MyToken_ABI, _provider);
+        const MyToken = contracts["MyToken"];
+        const _ercContract = new ethers.Contract(tokenAddress, MyToken.abi, _provider);
         //
         const _swapAddress = await _ercContract.getMySwapAddress();
-        const _swapContract = new ethers.Contract(_swapAddress, MySwap_ABI, _provider);
+        const _swapContract = new ethers.Contract(
+            _swapAddress,
+            contracts["MySwap"].abi,
+            _provider
+        );
         //
         const _nftName = await _nftContract.name();
         const _nftSymbol = await _nftContract.symbol();
@@ -187,9 +195,10 @@ export default function MintScreen() {
         const _swapName = await _swapContract.getName();
         const _swapRate = await _swapContract.swapRate();
         //
-        console.log("swapName - ", swapName);
+        // console.log("swapName - ", swapName);
         // console.log("swapRate - ", _swapRate);
         // console.log("swapContract - ", _swapContract);
+        // console.log("swapContract - ", _swapContract.target);
         //
         set_swapName(_swapName);
         set_swapRate(parseInt(_swapRate.toString()));

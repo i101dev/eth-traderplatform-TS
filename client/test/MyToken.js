@@ -60,9 +60,10 @@ describe("Token Exchange", () => {
         //
         myToken = await MyToken_OBJ.connect(deployer).deploy(
             tokenName,
-            tokenSymbol,
-            to_ETH(tokenSupply)
+            tokenSymbol
+            // to_ETH(tokenSupply)
         );
+        //
         myExchange = await Exchange_OBJ.deploy(feeAccount, feePercent);
         //
     });

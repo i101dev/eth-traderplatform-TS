@@ -20,8 +20,20 @@ An OTC orderbook for ERC20 tokenns. This contract implements a decentralized exc
 
 This contract implements a non-fungible token (NFT) representing factions. Users can mint and burn these NFTs, each associated with specific data. Additionally, the contract manages a related ERC-20 token (`MyToken`) used as a currency for minting the NFTs.
 
-## Usage
+### 5. `GameNFT.sol`
 
-To use these contracts, deploy them onto an Ethereum-compatible blockchain network. Once deployed, interact with the contracts using supported methods provided by each contract's interface.
+This contract implements a game-based NFT platform. Users can create and join games by paying an entry fee (ante). The contract tracks game data, including players and winners, and manages an escrow for game funds. The winner of a game receives the accumulated escrow.
 
-For more details on each contract's functionalities and usage, refer to the contract source code.
+## Hardhat contract deployment
+
+Requires a browser with metamask. You will be prompted to switch to the Hardhat local network.
+
+`cd client && npm install`
+
+`npx hardhat test`
+
+`npx hardhat node`
+
+### In a separate terminal:
+
+`npx hardhat run ./scripts/deploy.js --network localhost`
