@@ -28,7 +28,9 @@ This contract implements a game-based NFT platform. Users can create and join ga
 
 Requires a browser with metamask. You will be prompted to switch to the Hardhat local network.
 
-`cd client && npm install`
+`cd client`
+
+`npm install`
 
 `npx hardhat test`
 
@@ -36,4 +38,8 @@ Requires a browser with metamask. You will be prompted to switch to the Hardhat 
 
 ### In a separate terminal:
 
+`cd client`
+
 `npx hardhat run ./scripts/deploy.js --network localhost`
+
+`npm run dev`
